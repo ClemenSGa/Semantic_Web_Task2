@@ -1,0 +1,25 @@
+{
+  "name": "task_1",
+  "version": "1.0.0",
+  "description": "first assingment semantic web lecture",
+  "main": "index.js",
+  "scripts": {
+    "start": "npx babel-node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ClemenSGa/Semantic_Web_Task1.git"
+  },
+  "author": "Clemens Gasser",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ClemenSGa/Semantic_Web_Task1/issues"
+  },
+  "homepage": "https://github.com/ClemenSGa/Semantic_Web_Task1#readme",
+  "dependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-preset-es2015": "^6.24.1",
+    "q-io": "^1.13.5"
+  }
+}
