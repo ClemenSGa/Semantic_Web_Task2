@@ -3,19 +3,19 @@ import startUserInput from './userinput.js'
 
 const table = new Map()
 
-readFile(1)
-readFile(2)
 readFile(3)
 startUserInput(table)
 
 function readFile(i) {
-  return FS.read('./txt_src/' + i + '.txt', 'b')
-  .then(content => {
-    processFile(String(content), i)
-  })
-  .catch(err => {
-    console.log(err)
-  })
+  for(let j = 1; j <= i; j++) {
+    FS.read('./txt_src/' + j + '.txt', 'b')
+    .then(content => {
+      processFile(String(content), j)
+    })
+    .catch(err => {
+      console.log(err)
+    })
+  }
 }
 
 function processFile(content, i){
