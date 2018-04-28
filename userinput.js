@@ -28,6 +28,7 @@ function startSearch(matrix, answer) {
     const result = matrix.get(answer[i].toLowerCase())
     if(result === undefined) {
       i = answer.length
+      check_bool = false
       break
     }
     else {
