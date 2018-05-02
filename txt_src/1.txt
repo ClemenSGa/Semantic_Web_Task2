@@ -1,1 +1,1 @@
-This is an example text, it has some words.
+a book providing information about information retrieval

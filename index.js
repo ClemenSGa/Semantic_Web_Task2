@@ -1,40 +1,73 @@
-import FS from 'q-io/fs'
-import startUserInput from './userinput.js'
+import fs from 'q-io/fs'
+import fsReaddir from 'fs-readdir-promise'
+import promisify from 'util'
+import startUserInput from './search.js'
 
+
+const directoryPath = './txt_src'
 const table = new Map()
+let file_count = 0
 
-readFile(3)
-startUserInput(table)
+console.log('reading files.....please wait')
+readFiles()
 
-function readFile(i) {
-  for(let j = 1; j <= i; j++) {
-    FS.read('./txt_src/' + j + '.txt', 'b')
-    .then(content => {
-      processFile(String(content), j)
-    })
-    .catch(err => {
-      console.log(err)
+function readFiles() {
+  const promises = []
+    fsReaddir(directoryPath)
+    .then(files => {
+      files.forEach((file) => {
+        promises.push(
+          fs.read(directoryPath + '/' + file, 'b')
+          .then(content => {
+          file_count++
+          processFile(String(content), file)
+        })
+        .catch(err => {
+          console.log(err)
+        })
+      )})
+      Promise.all(promises).then(() => {
+          computeIDF()
+        })
+        .then(() => {
+          startUserInput(table)
+        })
+      })
+  .catch(err => {
+    console.log(err)
     })
   }
-}
 
 function processFile(content, i){
   const words = content.toLowerCase().replace(/[\.\,]/g,'').split(' ')
   words.forEach ((element) => {
     if (!table.has(element)) {
-      table.set(element, i)
+      const wrap = []
+      const arr = [i, 1, 0]
+      wrap.push(arr)
+      table.set(element, wrap)
     }
-    else{
+    else {
       const storedvalue = table.get(element)
-      if (storedvalue.constructor === Array) {
-        storedvalue.push(i)
-        table.set(element, storedvalue)
-      }
+      if(i === storedvalue[storedvalue.length - 1][0]) storedvalue[storedvalue.length - 1][1] += 1
       else {
-         const ii = [storedvalue, i]
-         table.set(element, ii)
-       }
+        const arr = [i, 1]
+        storedvalue.push(arr)
+      }
+      table.set(element, storedvalue)
     }
   })
+}
 
+function computeIDF() {
+  for (let [key, value] of table) {
+    let temp = 0
+    for(let i = 0; i < value.length; i++){
+      temp++
+    }
+    const idf = file_count / temp
+    value[0][2] = idf
+    table.set(key, value)
+  }
+  console.log('done')
 }
